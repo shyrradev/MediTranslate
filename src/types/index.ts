@@ -1,6 +1,7 @@
 export interface Language {
   code: string;
   name: string;
+  voiceCode?: string; // Optional for backwards compatibility
 }
 
 export interface TranscriptEntry {

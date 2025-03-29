@@ -8,7 +8,7 @@ import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { useTranslation } from './hooks/useTranslation';
 import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
 import { SUPPORTED_LANGUAGES } from './constants/languages';
-import { Volume2, AlertCircle, RotateCcw, Copy } from 'lucide-react';
+import { Volume2, AlertCircle, RotateCcw, Copy, Loader2 } from 'lucide-react';
 import type { Language } from './types';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
   
   const { isListening, transcript, error: speechError, toggleListening } = useSpeechRecognition(sourceLang);
   const { translate, isLoading, error: translationError } = useTranslation();
-  const { speak } = useSpeechSynthesis();
+  const { speak, isPlaying, error: speechSynthesisError } = useSpeechSynthesis();
 
   // Save language preferences
   useEffect(() => {
@@ -58,7 +58,7 @@ function App() {
     translateText();
   }, [transcript, sourceLang, targetLang]);
 
-  const error = speechError || translationError;
+  const error = speechError || translationError || speechSynthesisError;
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -127,10 +127,20 @@ function App() {
               <div className="mt-4 flex gap-2">
                 <button
                   onClick={() => speak(translatedText, targetLang)}
-                  className="btn btn-primary flex items-center gap-2"
+                  className={`btn ${isPlaying ? 'bg-green-600 hover:bg-green-700' : 'btn-primary'} flex items-center gap-2`}
+                  disabled={isPlaying}
                 >
-                  <Volume2 className="w-5 h-5" />
-                  Play Translation
+                  {isPlaying ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Playing...
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 className="w-5 h-5" />
+                      Play Translation
+                    </>
+                  )}
                 </button>
                 
                 <button
@@ -141,6 +151,15 @@ function App() {
                   <Copy className="w-5 h-5" />
                   Copy
                 </button>
+              </div>
+            )}
+            
+            {targetLang.code === 'ar' && (
+              <div className="mt-4 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <p>
+                  Arabic text-to-speech may have limited support in some browsers. If playback doesn't work, try a different browser or copy the text instead.
+                </p>
               </div>
             )}
           </div>

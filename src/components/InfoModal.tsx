@@ -1,5 +1,5 @@
-import React, { Fragment, useRef } from 'react';
-import { X, Mic, Globe, Volume2, Save, Clock, Moon } from 'lucide-react';
+import React, { Fragment, useRef, useState } from 'react';
+import { X, Mic, Globe, Volume2, Save, Clock, Moon, CheckCircle2 } from 'lucide-react';
 
 interface InfoModalProps {
   isOpen: boolean;
@@ -8,6 +8,8 @@ interface InfoModalProps {
 
 export function InfoModal({ isOpen, onClose }: InfoModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [voiceInfo, setVoiceInfo] = useState<string[]>([]);
+  const [showVoiceInfo, setShowVoiceInfo] = useState(false);
 
   if (!isOpen) return null;
 
@@ -15,6 +17,19 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       onClose();
     }
+  };
+  
+  const checkAvailableVoices = () => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      setVoiceInfo(['No voices available in your browser.']);
+    } else {
+      const voiceList = voices.map(voice => 
+        `${voice.name} (${voice.lang})${voice.default ? ' - Default' : ''}`
+      );
+      setVoiceInfo(voiceList);
+    }
+    setShowVoiceInfo(true);
   };
 
   return (
@@ -98,6 +113,33 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
               <li>Ensure you're in a quiet environment for better speech recognition</li>
               <li>Works best in Chrome, Edge, and Safari browsers</li>
             </ul>
+          </div>
+          
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Voice Support</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              Text-to-speech functionality varies by browser and language. Some languages like Arabic may have limited support in certain browsers.
+            </p>
+            <div className="flex flex-col gap-2">
+              <button 
+                onClick={checkAvailableVoices}
+                className="btn btn-primary text-sm py-1"
+              >
+                <CheckCircle2 className="w-4 h-4 mr-1" />
+                Check Voice Support
+              </button>
+              
+              {showVoiceInfo && (
+                <div className="mt-2 text-xs bg-white dark:bg-gray-900 p-2 rounded border border-gray-200 dark:border-gray-700 max-h-32 overflow-auto">
+                  <p className="font-medium mb-1">Available voices in your browser:</p>
+                  <ul className="space-y-1">
+                    {voiceInfo.map((voice, index) => (
+                      <li key={index} className="text-gray-600 dark:text-gray-400">{voice}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
