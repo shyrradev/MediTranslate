@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useState } from 'react';
-import { X, Mic, Globe, Volume2, Save, Clock, Moon, CheckCircle2 } from 'lucide-react';
+import { X, Mic, Globe, Volume2, Save, Clock, Moon, CheckCircle2, Brain, MessageSquare } from 'lucide-react';
 
 interface InfoModalProps {
   isOpen: boolean;
@@ -66,11 +66,31 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
             
             <div className="flex items-start gap-3">
               <div className="bg-primary-100 dark:bg-primary-900/30 p-2 rounded-full text-primary-600 dark:text-primary-400">
+                <Brain className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-800 dark:text-gray-200">AI-Powered Translation</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Utilizes advanced neural machine translation for more natural and accurate translations.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="bg-primary-100 dark:bg-primary-900/30 p-2 rounded-full text-primary-600 dark:text-primary-400">
                 <Mic className="w-5 h-5" />
               </div>
               <div>
                 <h4 className="font-medium text-gray-800 dark:text-gray-200">Speech Recognition</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Click the microphone button to start/stop listening.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="bg-primary-100 dark:bg-primary-900/30 p-2 rounded-full text-primary-600 dark:text-primary-400">
+                <MessageSquare className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-800 dark:text-gray-200">Animated Avatar</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">A charming avatar appears during translation playback with unique visual traits for each language.</p>
               </div>
             </div>
             
@@ -113,6 +133,17 @@ export function InfoModal({ isOpen, onClose }: InfoModalProps) {
               <li>Ensure you're in a quiet environment for better speech recognition</li>
               <li>Works best in Chrome, Edge, and Safari browsers</li>
             </ul>
+          </div>
+          
+          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">About AI Translation</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              MediTranslate uses state-of-the-art neural machine translation technology from Hugging Face to provide high-quality translations. The app intelligently falls back to traditional translation methods if AI translation is temporarily unavailable.
+            </p>
+            <div className="flex items-center gap-2 mt-2 text-xs bg-purple-100 dark:bg-purple-900/30 p-2 rounded">
+              <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+              <p className="text-purple-700 dark:text-purple-300">Neural translation provides more natural and contextually accurate results.</p>
+            </div>
           </div>
           
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
